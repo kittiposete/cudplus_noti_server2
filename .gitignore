@@ -40,3 +40,4 @@ src/test/java/TestBotAdaptor.kt
 
 ### Test ###
 src/test/
+.idea/vcs.xml
