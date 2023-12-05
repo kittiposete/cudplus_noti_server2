@@ -2,13 +2,10 @@ package org.example
 
 import com.google.gson.Gson
 import org.eclipse.jetty.websocket.api.Session
-import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage
-import org.eclipse.jetty.websocket.api.annotations.WebSocket
 
-@WebSocket
 class WebSocketHandler {
-    @OnWebSocketMessage
     fun message(session: Session?, message: String?) {
+        println("message: $message")
         if (message == null || session == null) {
             return
         }
