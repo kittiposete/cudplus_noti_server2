@@ -9,7 +9,12 @@ class BotAdapter {
     // get src folder path
     private val checkUsernameAndPasswordPy = "src/main/python/check_username_and_password_command.py"
     private val getChatDataPy = "src/main/python/get_chat_data_command.py"
-    private val interpreterPath = "src/main/python/venv/bin/python3"
+
+    private var interpreterPath: String = when {
+        System.getProperty("os.name").lowercase().contains("linux") -> "src/main/python/venv/bin/python3"
+        System.getProperty("os.name").lowercase().contains("mac") -> "src/main/python/venv_macos/bin/python3"
+        else -> throw IllegalArgumentException("Platform not supported")
+    }
 
 
     fun checkUsernameAndPassword(username: String, password: String): BotResult {

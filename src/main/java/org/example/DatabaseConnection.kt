@@ -6,14 +6,21 @@ import java.sql.DriverManager
 import java.sql.ResultSet
 
 class DatabaseConnection {
-    private val databasePath = "/home/kittipos/database/cudplus/database.db"
+    //    private var databasePath = "/home/kittipos/database/cudplus/database.db"
+    private var databasePath: String = when {
+        System.getProperty("os.name").lowercase().contains("linux") -> "/home/kittipos/database/cudplus/database.db"
+        System.getProperty("os.name").lowercase().contains("mac") -> "/Users/kittipos/my_database/cudplus/database.db"
+        else -> throw IllegalArgumentException("Platform not supported")
+    }
     private val subscriptionTableName = "subscription"
     private val chatDataTableName = "chat_data"
     private var conn: Connection
 
     init {
-        if (!File(databasePath).exists()) {
-            File(databasePath).createNewFile()
+        val dbFile = File(databasePath)
+        if (!dbFile.exists()) {
+            dbFile.parentFile?.mkdirs()   //create parent dirs
+            dbFile.createNewFile()
         }
         conn = DriverManager.getConnection("jdbc:sqlite:$databasePath")
         // check if table
@@ -33,10 +40,10 @@ class DatabaseConnection {
         }
         if (!foundSubscriptionTable) {
             conn.createStatement()
-                .execute("CREATE TABLE {subscription_table_name} (user text, password text, device_id text)")
+                .execute("CREATE TABLE $subscriptionTableName (user text, password text, device_id text)")
         }
         if (!foundChatDataTable) {
-            conn.createStatement().execute("CREATE TABLE {chat_data_table_name} (user text, chat_data text)")
+            conn.createStatement().execute("CREATE TABLE $chatDataTableName (user text, chat_data text)")
         }
     }
 
