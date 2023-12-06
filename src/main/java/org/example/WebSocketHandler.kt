@@ -7,70 +7,6 @@ import org.java_websocket.server.WebSocketServer
 import java.net.InetSocketAddress
 
 class WebSocketHandler internal constructor(port: Int) : WebSocketServer(InetSocketAddress(port)) {
-    /*    fun message(session: Session?, message: String?) {
-                println("message: $message")
-                if (message == null || session == null) {
-                    return
-                }
-                val messageJson = Gson().fromJson(message, HashMap::class.java)
-                val method = RequestMethod.fromString(messageJson["method"] as String)
-
-                when (method) {
-                    RequestMethod.SUBSCRIBE -> {
-                        val username = messageJson["username"] as? String
-                        val password = messageJson["password"] as? String
-                        val deviceId = messageJson["device_id"] as? String
-                        if (username == null || password == null || deviceId == null) {
-                            session.remote.sendString(ServerResult.FAIL.toString())
-                            return
-                        } else if (username.isEmpty() || password.isEmpty() || deviceId.isEmpty()) {
-                            session.remote.sendString(ServerResult.FAIL.toString())
-                            return
-                        }
-
-                        if (DatabaseConnection().isAlreadySubscribe(username, password, deviceId)) {
-                            session.remote.sendString(ServerResult.SUCCESS.toString())
-                            return
-                        }
-
-                        if (BotAdapter().checkUsernameAndPassword(username, password) == BotResult.SUCCESS) {
-                            session.remote.sendString(ServerResult.SUCCESS.toString())
-                            DatabaseConnection().addSubscription(username, password, deviceId)
-                            return
-                        } else {
-                            session.remote.sendString(ServerResult.FAIL.toString())
-                            return
-                        }
-                    }
-
-                    RequestMethod.CHECK_SUBSCRIBE -> {
-                        val username = messageJson["username"] as? String
-                        val password = messageJson["password"] as? String
-                        val deviceId = messageJson["device_id"] as? String
-                        if (username == null || password == null || deviceId == null) {
-                            session.remote.sendString(ServerResult.FAIL.toString())
-                            return
-                        } else if (username.isEmpty() || password.isEmpty() || deviceId.isEmpty()) {
-                            session.remote.sendString(ServerResult.FAIL.toString())
-                            return
-                        }
-
-                        if (DatabaseConnection().isAlreadySubscribe(username, password, deviceId)) {
-                            session.remote.sendString(ServerResult.TRUE.toString())
-                            return
-                        } else {
-                            session.remote.sendString(ServerResult.FALSE.toString())
-                            return
-                        }
-                    }
-                }
-            }*/
-
-
-    init {
-        println("init")
-    }
-
     override fun onMessage(socketConnection: WebSocket?, message: String?) {
         println("message: $message")
         if (message == null || socketConnection == null) {
@@ -85,28 +21,23 @@ class WebSocketHandler internal constructor(port: Int) : WebSocketServer(InetSoc
                 val password = messageJson["password"] as? String
                 val deviceId = messageJson["device_id"] as? String
                 if (username == null || password == null || deviceId == null) {
-//                    socketConnection.remote.sendString(ServerResult.FAIL.toString())
                     socketConnection.send(ServerResult.FAIL.toString())
                     return
                 } else if (username.isEmpty() || password.isEmpty() || deviceId.isEmpty()) {
-//                    session.remote.sendString(ServerResult.FAIL.toString())
                     socketConnection.send(ServerResult.FAIL.toString())
                     return
                 }
 
                 if (DatabaseConnection().isAlreadySubscribe(username, password, deviceId)) {
-//                    session.remote.sendString(ServerResult.SUCCESS.toString())
                     socketConnection.send(ServerResult.SUCCESS.toString())
                     return
                 }
 
                 if (BotAdapter().checkUsernameAndPassword(username, password) == BotResult.SUCCESS) {
-//                    session.remote.sendString(ServerResult.SUCCESS.toString())
                     socketConnection.send(ServerResult.SUCCESS.toString())
                     DatabaseConnection().addSubscription(username, password, deviceId)
                     return
                 } else {
-//                    session.remote.sendString(ServerResult.FAIL.toString())
                     socketConnection.send(ServerResult.FAIL.toString())
                     return
                 }
@@ -117,21 +48,17 @@ class WebSocketHandler internal constructor(port: Int) : WebSocketServer(InetSoc
                 val password = messageJson["password"] as? String
                 val deviceId = messageJson["device_id"] as? String
                 if (username == null || password == null || deviceId == null) {
-//                    session.remote.sendString(ServerResult.FAIL.toString())
                     socketConnection.send(ServerResult.FAIL.toString())
                     return
                 } else if (username.isEmpty() || password.isEmpty() || deviceId.isEmpty()) {
-//                    session.remote.sendString(ServerResult.FAIL.toString())
                     socketConnection.send(ServerResult.FAIL.toString())
                     return
                 }
 
                 if (DatabaseConnection().isAlreadySubscribe(username, password, deviceId)) {
-//                    session.remote.sendString(ServerResult.TRUE.toString())
                     socketConnection.send(ServerResult.TRUE.toString())
                     return
                 } else {
-//                    session.remote.sendString(ServerResult.FALSE.toString())
                     socketConnection.send(ServerResult.FALSE.toString())
                     return
                 }
