@@ -80,7 +80,7 @@ class WebSocketHandler internal constructor(port: Int) : WebSocketServer(InetSoc
     }
 
     override fun onStart() {
-        println("start server")
+        println("start server at port $port")
     }
 }
 

@@ -47,7 +47,7 @@ class DatabaseConnection {
         }
     }
 
-    fun addSubscription(username: String, password: String, deviceId: String) {
+    @Synchronized fun addSubscription(username: String, password: String, deviceId: String) {
         if (isAlreadySubscribe(username, password, deviceId)) {
             return
         }
@@ -59,7 +59,8 @@ class DatabaseConnection {
         preparedStatement.executeUpdate()
     }
 
-    fun readChatData(username: String): String? {
+
+    @Synchronized fun readChatData(username: String): String? {
         val sqlStatement = "SELECT chat_data FROM $chatDataTableName WHERE user = ?"
         val preparedStatement = conn.prepareStatement(sqlStatement)
         preparedStatement.setString(1, username)
@@ -71,7 +72,8 @@ class DatabaseConnection {
         }
     }
 
-    fun saveChatData(username: String, chatData: String) {
+
+    @Synchronized fun saveChatData(username: String, chatData: String) {
         val oldChatData = readChatData(username)
         if (oldChatData == chatData) {
             return
@@ -91,7 +93,8 @@ class DatabaseConnection {
         }
     }
 
-    fun isAlreadySubscribe(username: String, password: String, deviceId: String): Boolean {
+
+    @Synchronized fun isAlreadySubscribe(username: String, password: String, deviceId: String): Boolean {
         // check is have data like this in subscription table
         val sqlStatement = "SELECT * FROM $subscriptionTableName WHERE user = ? AND password = ? AND device_id = ?"
         val preparedStatement = conn.prepareStatement(sqlStatement)
