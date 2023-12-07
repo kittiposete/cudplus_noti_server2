@@ -47,7 +47,26 @@ class DatabaseConnection {
         }
     }
 
-    @Synchronized fun addSubscription(username: String, password: String, deviceId: String) {
+    @Synchronized
+    fun getSubscriptionData(): List<SubscriptionData> {
+        val sqlStatement = "SELECT * FROM $subscriptionTableName"
+        val preparedStatement = conn.prepareStatement(sqlStatement)
+        val rs = preparedStatement.executeQuery()
+        val result = mutableListOf<SubscriptionData>()
+        while (rs.next()) {
+            result.add(
+                SubscriptionData(
+                    rs.getString("user"),
+                    rs.getString("password"),
+                    rs.getString("device_id")
+                )
+            )
+        }
+        return result
+    }
+
+    @Synchronized
+    fun addSubscription(username: String, password: String, deviceId: String) {
         if (isAlreadySubscribe(username, password, deviceId)) {
             return
         }
@@ -60,7 +79,8 @@ class DatabaseConnection {
     }
 
 
-    @Synchronized fun readChatData(username: String): String? {
+    @Synchronized
+    fun readChatData(username: String): String? {
         val sqlStatement = "SELECT chat_data FROM $chatDataTableName WHERE user = ?"
         val preparedStatement = conn.prepareStatement(sqlStatement)
         preparedStatement.setString(1, username)
@@ -73,7 +93,8 @@ class DatabaseConnection {
     }
 
 
-    @Synchronized fun saveChatData(username: String, chatData: String) {
+    @Synchronized
+    fun saveChatData(username: String, chatData: String) {
         val oldChatData = readChatData(username)
         if (oldChatData == chatData) {
             return
@@ -94,7 +115,8 @@ class DatabaseConnection {
     }
 
 
-    @Synchronized fun isAlreadySubscribe(username: String, password: String, deviceId: String): Boolean {
+    @Synchronized
+    fun isAlreadySubscribe(username: String, password: String, deviceId: String): Boolean {
         // check is have data like this in subscription table
         val sqlStatement = "SELECT * FROM $subscriptionTableName WHERE user = ? AND password = ? AND device_id = ?"
         val preparedStatement = conn.prepareStatement(sqlStatement)
@@ -110,3 +132,9 @@ class DatabaseConnection {
         conn.close()
     }
 }
+
+data class SubscriptionData(
+    val username: String,
+    val password: String,
+    val deviceId: String
+)
