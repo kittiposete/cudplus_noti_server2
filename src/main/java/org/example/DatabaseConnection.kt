@@ -48,11 +48,11 @@ class DatabaseConnection {
     }
 
     @Synchronized
-    fun getSubscriptionData(): List<SubscriptionData> {
+    fun getSubscriptionData(): ArrayList<SubscriptionData> {
         val sqlStatement = "SELECT * FROM $subscriptionTableName"
         val preparedStatement = conn.prepareStatement(sqlStatement)
         val rs = preparedStatement.executeQuery()
-        val result = mutableListOf<SubscriptionData>()
+        val result = ArrayList<SubscriptionData>()
         while (rs.next()) {
             result.add(
                 SubscriptionData(
