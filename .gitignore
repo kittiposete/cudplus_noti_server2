@@ -42,3 +42,6 @@ src/test/java/TestBotAdaptor.kt
 src/test/
 .idea/vcs.xml
 src/main/resources/cudplus-noti2-firebase-adminsdk-uydcn-62b0ea1cb2.json
+
+### Python cache ###
+src/main/python/__pycache__/
