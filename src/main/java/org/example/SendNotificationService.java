@@ -12,9 +12,9 @@ public class SendNotificationService {
                 String password = data.getPassword();
                 BotAdapter botAdapter = new BotAdapter();
 
-
                 String oldChatData = databaseConnection.readChatData(username);
                 GetChatDataResult newChatData = botAdapter.getChatData(username, password);
+                System.out.println("finished getting chat data");
                 if (newChatData.getStatus() != BotResult.SUCCESS) {
                     System.out.println("Error: " + newChatData.getStatus());
                     continue;
@@ -30,6 +30,8 @@ public class SendNotificationService {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
+                } else {
+                    System.out.println("No new chat");
                 }
             }
         }
