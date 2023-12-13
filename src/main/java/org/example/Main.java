@@ -4,6 +4,7 @@ public class Main {
     public static void main(String[] args) {
         DatabaseConnection databaseConnection = new DatabaseConnection();
 
+
         WebSocketHandler clientHandler = new WebSocketHandler(3881, databaseConnection);
         clientHandler.start();
 

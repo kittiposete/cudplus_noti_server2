@@ -23,6 +23,22 @@ class DatabaseConnection {
             dbFile.createNewFile()
         }
         conn = DriverManager.getConnection("jdbc:sqlite:$databasePath")
+
+        // check it database locked force unlock
+        try {
+            conn.createStatement().execute("BEGIN IMMEDIATE TRANSACTION")
+            // Database is not locked, you can proceed
+            conn.createStatement().execute("COMMIT")
+        } catch (e: Exception) {
+            // Database is locked force unlock
+            try {
+                conn.createStatement().execute("ROLLBACK")
+            } catch (rollbackException: Exception) {
+                // Handle the rollback exception if necessary
+                rollbackException.printStackTrace()
+            }
+        }
+
         // check if table
         val metaData = conn.metaData
         val rs: ResultSet = metaData.getTables(null, null, "%", null)
