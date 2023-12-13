@@ -6,7 +6,8 @@ import org.java_websocket.handshake.ClientHandshake
 import org.java_websocket.server.WebSocketServer
 import java.net.InetSocketAddress
 
-class WebSocketHandler internal constructor(port: Int) : WebSocketServer(InetSocketAddress(port)) {
+class WebSocketHandler internal constructor(port: Int, private val databaseConnection: DatabaseConnection) :
+    WebSocketServer(InetSocketAddress(port)) {
     override fun onMessage(socketConnection: WebSocket?, message: String?) {
         println("message: $message")
         if (message == null || socketConnection == null) {
@@ -28,14 +29,14 @@ class WebSocketHandler internal constructor(port: Int) : WebSocketServer(InetSoc
                     return
                 }
 
-                if (DatabaseConnection().isAlreadySubscribe(username, password, deviceId)) {
+                if (databaseConnection.isAlreadySubscribe(username, password, deviceId)) {
                     socketConnection.send(ServerResult.SUCCESS.toString())
                     return
                 }
 
                 if (BotAdapter().checkUsernameAndPassword(username, password) == BotResult.SUCCESS) {
                     socketConnection.send(ServerResult.SUCCESS.toString())
-                    DatabaseConnection().addSubscription(username, password, deviceId)
+                    databaseConnection.addSubscription(username, password, deviceId)
                     return
                 } else {
                     socketConnection.send(ServerResult.FAIL.toString())
@@ -55,7 +56,7 @@ class WebSocketHandler internal constructor(port: Int) : WebSocketServer(InetSoc
                     return
                 }
 
-                if (DatabaseConnection().isAlreadySubscribe(username, password, deviceId)) {
+                if (databaseConnection.isAlreadySubscribe(username, password, deviceId)) {
                     socketConnection.send(ServerResult.TRUE.toString())
                     return
                 } else {
