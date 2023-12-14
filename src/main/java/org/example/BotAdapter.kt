@@ -48,15 +48,10 @@ class BotAdapter {
     fun getChatData(username: String, password: String): GetChatDataResult {
         logging("getChatData")
         val proc = ProcessBuilder(interpreterPath, getChatDataPy, username, password).start()
-//        val command = "$interpreterPath $getChatDataPy $username \"$password\""
-//        logging("command: $command")
-//        val proc = Runtime.getRuntime().exec(command)
         logging("start bot process")
 
 
-//        proc.waitFor(600, TimeUnit.SECONDS)
         val startTime = System.currentTimeMillis()
-
 
         while (true) {
             try {
