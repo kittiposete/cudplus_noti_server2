@@ -20,7 +20,7 @@ def init():
 
     option = webdriver.ChromeOptions()
     option.add_argument("--headless")
-    option.add_argument('--disable-gpu')
+    # option.add_argument('--disable-gpu')
     option.add_argument("--incognito")
     driver = webdriver.Chrome(options=option)
 
@@ -161,7 +161,7 @@ def read_notifications(length):
     return output
 
 
-def get_chat_date(load_all_message: bool = False):
+def get_chat_date(load_all_message: bool = False, load_only_first_chat=True):
     def count_message():
         chat_list = driver.find_elements(by=By.XPATH,
                                          value="/html/body/div[1]/div[3]/div[2]/div["
@@ -316,6 +316,9 @@ def get_chat_date(load_all_message: bool = False):
         end_time = datetime.datetime.now()
         # print("read message time: {} ms".format((end_time - start_time).microseconds / 1000))
         driver.back()
+
+        if load_only_first_chat:
+            break
     return message_list
 
 

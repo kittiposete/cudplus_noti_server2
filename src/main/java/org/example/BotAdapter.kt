@@ -43,11 +43,38 @@ class BotAdapter {
         }
     }
 
-    fun getChatData(username: String, password: String): GetChatDataResult {
-        println("getChatData")
-        val proc = ProcessBuilder(interpreterPath, getChatDataPy, username, password).start()
+    private fun logging(message: String) = println("[BotAdapter] $message")
 
-        proc.waitFor(1200, TimeUnit.SECONDS)
+    fun getChatData(username: String, password: String): GetChatDataResult {
+        logging("getChatData")
+        val proc = ProcessBuilder(interpreterPath, getChatDataPy, username, password).start()
+//        val command = "$interpreterPath $getChatDataPy $username \"$password\""
+//        logging("command: $command")
+//        val proc = Runtime.getRuntime().exec(command)
+        logging("start bot process")
+
+
+//        proc.waitFor(600, TimeUnit.SECONDS)
+        val startTime = System.currentTimeMillis()
+
+
+        while (true) {
+            try {
+                proc.exitValue()
+                break
+            } catch (e: IllegalThreadStateException) {
+                val currentTime = System.currentTimeMillis()
+                logging("bot is alive for ${currentTime - startTime} ms")
+                Thread.sleep(1000)
+            }
+        }
+
+        val endTime = System.currentTimeMillis()
+        // log the time
+        logging("bot is alive for ${endTime - startTime} ms")
+
+
+        logging("bot is finished")
 
         val output = BufferedReader(InputStreamReader(proc.inputStream)).readText().trim()
 

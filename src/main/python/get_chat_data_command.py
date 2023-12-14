@@ -6,7 +6,6 @@ import bot_worker
 username = sys.argv[1]
 password = sys.argv[2]
 
-
 def throw_error():
     print("{\"status\":\"error\"}")
 
@@ -80,6 +79,6 @@ json_object["status"] = status
 json_object["chat"] = chat_str
 json_str = json.dumps(json_object)
 
-
 # print result
-print(json_str)
+print(json_str + "\n")
+exit(0)

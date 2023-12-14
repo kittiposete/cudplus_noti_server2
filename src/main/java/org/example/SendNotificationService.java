@@ -3,18 +3,22 @@ package org.example;
 import java.util.ArrayList;
 
 public class SendNotificationService {
+    private void logging(String message) {
+        System.out.println("(Send Notification Service): " + message);
+    }
     void run(DatabaseConnection databaseConnection) {
         while (true) {
             ArrayList<SubscriptionData> subscriptionData = databaseConnection.getSubscriptionData();
             for (SubscriptionData data : subscriptionData) {
-                System.out.println("Checking for " + data.getUsername());
+                logging("Checking for " + data.getUsername());
                 String username = data.getUsername();
                 String password = data.getPassword();
                 BotAdapter botAdapter = new BotAdapter();
 
-                String oldChatData = databaseConnection.readChatData(username);
                 GetChatDataResult newChatData = botAdapter.getChatData(username, password);
-                System.out.println("finished getting chat data");
+                logging("(Bot Service): finished getting chat data");
+                String oldChatData = databaseConnection.readChatData(username);
+                logging("finished reading chat data");
                 if (newChatData.getStatus() != BotResult.SUCCESS) {
                     System.out.println("Error: " + newChatData.getStatus());
                     continue;
