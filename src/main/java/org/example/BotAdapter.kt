@@ -58,8 +58,6 @@ class BotAdapter {
                 proc.exitValue()
                 break
             } catch (e: IllegalThreadStateException) {
-                val currentTime = System.currentTimeMillis()
-                logging("bot is alive for ${currentTime - startTime} ms")
                 Thread.sleep(1000)
             }
         }
