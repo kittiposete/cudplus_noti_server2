@@ -161,7 +161,7 @@ def read_notifications(length):
     return output
 
 
-def get_chat_date(load_all_message: bool = False, load_only_first_chat=True):
+def get_chat_date(load_all_message: bool = False, load_only_first_chat=False):
     def count_message():
         chat_list = driver.find_elements(by=By.XPATH,
                                          value="/html/body/div[1]/div[3]/div[2]/div["

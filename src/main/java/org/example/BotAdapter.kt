@@ -3,6 +3,7 @@ package org.example
 import com.google.gson.Gson
 import java.io.BufferedReader
 import java.io.InputStreamReader
+import java.math.BigInteger
 import java.util.concurrent.TimeUnit
 
 class BotAdapter {
@@ -51,33 +52,35 @@ class BotAdapter {
         logging("start bot process")
 
 
-        val startTime = System.currentTimeMillis()
+//        val startTime = System.currentTimeMillis()
+//
+//        while (true) {
+//            try {
+//                proc.exitValue()
+//                break
+//            } catch (e: IllegalThreadStateException) {
+//                Thread.sleep(1000)
+//            }
+//        }
+//
+//        val endTime = System.currentTimeMillis()
+//        // log the time
+//        logging("bot is alive for ${endTime - startTime} ms")
 
-        while (true) {
-            try {
-                proc.exitValue()
-                break
-            } catch (e: IllegalThreadStateException) {
-                Thread.sleep(1000)
-            }
-        }
 
-        val endTime = System.currentTimeMillis()
-        // log the time
-        logging("bot is alive for ${endTime - startTime} ms")
-
-
-        logging("bot is finished")
+//        logging("bot is finished")
 
         val reader = BufferedReader(InputStreamReader(proc.inputStream))
         val chars = mutableListOf<Char>()
         var char: Int = reader.read()
         chars.add(char.toChar())
-        var count: Long = 0
+        var count: BigInteger = BigInteger.ZERO
         while (char != -1) {
-            count++
+//            count++
+            count = count.add(BigInteger.ONE)
             char = reader.read()
-            if (count % 2 == 0L) {
+//            if (count % 2 == 0L) {
+            if (count.mod(BigInteger.valueOf(2)) == BigInteger.ZERO) {
                 chars.add(char.toChar())
             }
         }
