@@ -71,14 +71,19 @@ class BotAdapter {
 
         logging("bot is finished")
 
-        val output = BufferedReader(InputStreamReader(proc.inputStream)).readText().trim()
-
-        val errorOutput = BufferedReader(InputStreamReader(proc.errorStream)).readText().trim()
-        if (errorOutput.isNotEmpty()) {
-            println("Error: $errorOutput")
-            return GetChatDataResult(null, BotResult.UNKNOWN_ERROR)
+        val reader = BufferedReader(InputStreamReader(proc.inputStream))
+        val chars = mutableListOf<Char>()
+        var char: Int = reader.read()
+        chars.add(char.toChar())
+        var count: Long = 0
+        while (char != -1) {
+            count++
+            char = reader.read()
+            if (count % 2 == 0L) {
+                chars.add(char.toChar())
+            }
         }
-
+        val output = chars.joinToString("").trim().dropLast(1)
         println("output: $output")
 
         // output is json string, convent it to hashmap
