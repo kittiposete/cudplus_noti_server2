@@ -51,35 +51,14 @@ class BotAdapter {
         val proc = ProcessBuilder(interpreterPath, getChatDataPy, username, password).start()
         logging("start bot process")
 
-
-//        val startTime = System.currentTimeMillis()
-//
-//        while (true) {
-//            try {
-//                proc.exitValue()
-//                break
-//            } catch (e: IllegalThreadStateException) {
-//                Thread.sleep(1000)
-//            }
-//        }
-//
-//        val endTime = System.currentTimeMillis()
-//        // log the time
-//        logging("bot is alive for ${endTime - startTime} ms")
-
-
-//        logging("bot is finished")
-
         val reader = BufferedReader(InputStreamReader(proc.inputStream))
         val chars = mutableListOf<Char>()
         var char: Int = reader.read()
         chars.add(char.toChar())
         var count: BigInteger = BigInteger.ZERO
         while (char != -1) {
-//            count++
             count = count.add(BigInteger.ONE)
             char = reader.read()
-//            if (count % 2 == 0L) {
             if (count.mod(BigInteger.valueOf(2)) == BigInteger.ZERO) {
                 chars.add(char.toChar())
             }
