@@ -88,8 +88,3 @@ class BotAdapter {
 
 class GetChatDataResult(val chatData: String?, val status: BotResult)
 
-enum class BotResult {
-    SUCCESS,
-    WRONG_USERNAME_OR_PASSWORD,
-    UNKNOWN_ERROR
-}
