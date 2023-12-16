@@ -311,9 +311,7 @@ def get_chat_date(load_all_message: bool = False, load_only_first_chat=False):
             while True:
                 if count_message() > 0:
                     break
-        start_time = datetime.datetime.now()
         message_list += read_message()
-        end_time = datetime.datetime.now()
         # print("read message time: {} ms".format((end_time - start_time).microseconds / 1000))
         driver.back()
 
