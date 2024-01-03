@@ -17,7 +17,7 @@ public class PushNotification {
 
     private void loadFirebaseConfig() {
         try {
-            FileInputStream serviceAccount = new FileInputStream("src/main/resources/cudplus-noti2-firebase-adminsdk-89971-b838876e9f.json");
+            FileInputStream serviceAccount = new FileInputStream("src/main/cudplus-noti2-firebase-adminsdk-89971-9d78681559.json");
 
             FirebaseOptions options = new FirebaseOptions.Builder()
                     .setCredentials(GoogleCredentials.fromStream(serviceAccount))
