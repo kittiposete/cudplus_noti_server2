@@ -17,14 +17,16 @@ public class PushNotification {
 
     private void loadFirebaseConfig() {
         try {
-            FileInputStream serviceAccount = new FileInputStream("src/main/resources/cudplus-noti2-firebase-adminsdk-89971-fe020a986b.json");
+            FileInputStream serviceAccount = new FileInputStream("src/main/resources/cudplus-noti2-firebase-adminsdk-89971-b838876e9f.json");
 
             FirebaseOptions options = new FirebaseOptions.Builder()
                     .setCredentials(GoogleCredentials.fromStream(serviceAccount))
                     .setDatabaseUrl("https://cudplus-noti2.firebaseio.com/")
                     .build();
 
-            FirebaseApp.initializeApp(options);
+            if (FirebaseApp.getApps().isEmpty()) {
+                FirebaseApp.initializeApp(options);
+            }
         } catch (IOException e) {
             System.out.println("Failed to initialize Firebase: " + e.getMessage());
         }

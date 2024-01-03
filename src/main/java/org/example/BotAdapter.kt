@@ -64,7 +64,6 @@ class BotAdapter {
             }
         }
         val output = chars.joinToString("").trim().dropLast(1)
-//        println("output: $output")
 
         // output is json string, convent it to hashmap
         Gson().fromJson(output, HashMap::class.java).let {
