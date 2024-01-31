@@ -82,5 +82,5 @@ json_str = json.dumps(json_object)
 
 # print result
 for c in json_str:
-    print(c)
+    print(c, end="")
 exit(0)

@@ -3,13 +3,18 @@ package org.example
 import com.google.gson.Gson
 import java.io.BufferedReader
 import java.io.InputStreamReader
-import java.math.BigInteger
+import java.util.*
 import java.util.concurrent.TimeUnit
+import kotlin.collections.HashMap
 
 class BotAdapter {
     // get src folder path
     private val checkUsernameAndPasswordPy = "src/main/python/check_username_and_password_command.py"
     private val getChatDataPy = "src/main/python/get_chat_data_command.py"
+
+    init {
+        println("init BotAdapter")
+    }
 
     private var interpreterPath: String = when {
         System.getProperty("os.name").lowercase().contains("linux") -> "src/main/python/venv/bin/python3"
@@ -19,6 +24,7 @@ class BotAdapter {
 
 
     fun checkUsernameAndPassword(username: String, password: String): BotResult {
+        println("checkUsernameAndPassword")
         val proc = ProcessBuilder(interpreterPath, checkUsernameAndPasswordPy, username, password).start()
 
         proc.waitFor(600, TimeUnit.SECONDS)
@@ -29,6 +35,7 @@ class BotAdapter {
         if (errorOutput.isNotEmpty()) {
             println("Error: $errorOutput")
         }
+        println("check username and password Output: $output")
         return when (output) {
             "true" -> {
                 BotResult.SUCCESS
@@ -51,26 +58,48 @@ class BotAdapter {
         val proc = ProcessBuilder(interpreterPath, getChatDataPy, username, password).start()
         logging("start bot process")
 
-        val reader = BufferedReader(InputStreamReader(proc.inputStream))
-        val chars = mutableListOf<Char>()
-        var char: Int = reader.read()
-        chars.add(char.toChar())
-        var count: BigInteger = BigInteger.ZERO
-        while (char != -1) {
-            count = count.add(BigInteger.ONE)
-            char = reader.read()
-            if (count.mod(BigInteger.valueOf(2)) == BigInteger.ZERO) {
-                chars.add(char.toChar())
+//        val reader = BufferedReader(InputStreamReader(proc.inputStream))
+//        val chars = mutableListOf<Char>()
+//        var char: Int = reader.read()
+//        chars.add(char.toChar())
+//        var count: BigInteger = BigInteger.ZERO
+//        while (char != -1) {
+//            count = count.add(BigInteger.ONE)
+//            char = reader.read()
+//            if (count.mod(BigInteger.valueOf(2)) == BigInteger.ZERO) {
+//                chars.add(char.toChar())
+//            }
+//        }
+//        val output = chars.joinToString("").trim().dropLast(1)
+
+        var output = ""
+        // now + 60 seconds
+        val timeout = Date().time + 60 * 1000
+        while (Date().time < timeout) {
+            val char = proc.inputStream.read()
+            output += char.toChar()
+            // if the process finished
+//            if (proc.isAlive.not()) {
+            if (char == -1) {
+                // check exit code
+                if (proc.exitValue() != 0) {
+                    logging("Error: ${proc.errorStream.bufferedReader().readText()}")
+                    return GetChatDataResult(null, BotResult.UNKNOWN_ERROR)
+                } else {
+                    break
+                }
             }
         }
-        val output = chars.joinToString("").trim().dropLast(1)
+
+        output = output.trim().dropLast(1)
+        println("output: $output")
 
         // output is json string, convent it to hashmap
         Gson().fromJson(output, HashMap::class.java).let {
             val status = it["status"] as? String
             when (status) {
                 "success" -> {
-                    return GetChatDataResult(it["data"] as? String, BotResult.SUCCESS)
+                    return GetChatDataResult(it["chat"] as String, BotResult.SUCCESS)
                 }
 
                 "password wrong" -> {
