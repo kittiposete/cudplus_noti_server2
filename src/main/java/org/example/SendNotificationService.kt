@@ -29,12 +29,12 @@ class SendNotificationService {
                     if (oldChatData == null) {
                         assert(newChatDataString != null)
                         println("username: $username")
-                        println("new chat data: $newChatDataString")
+//                        println("new chat data: $newChatDataString")
                         databaseConnection.saveChatData(username, newChatDataString!!)
                         continue
                     }
                     println("old chat data: $oldChatData")
-                    println("new chat data: $newChatDataString")
+//                    println("new chat data: $newChatDataString")
                     if (oldChatData != newChatDataString) {
                         val title = "New Chat"
                         val message = "new chat"
