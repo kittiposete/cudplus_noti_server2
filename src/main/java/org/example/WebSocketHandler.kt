@@ -34,7 +34,18 @@ class WebSocketHandler internal constructor(port: Int, private val databaseConne
                     return
                 }
 
+                // start thread for ping to a client until finish for keep in touch with a client
+                var isFinish = false
+                Thread {
+                    while (!isFinish) {
+                        socketConnection.send("ping")
+                        Thread.sleep(10000)
+                    }
+                }.start()
+
                 if (BotAdapter().checkUsernameAndPassword(username, password) == BotResult.SUCCESS) {
+                    println("check username and password success")
+                    isFinish = true
                     socketConnection.send(ServerResult.SUCCESS.toString())
                     databaseConnection.addSubscription(username, password, deviceId)
                     return
