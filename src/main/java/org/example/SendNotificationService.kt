@@ -33,7 +33,7 @@ class SendNotificationService {
                         databaseConnection.saveChatData(username, newChatDataString!!)
                         continue
                     }
-                    println("old chat data: $oldChatData")
+//                    println("old chat data: $oldChatData")
 //                    println("new chat data: $newChatDataString")
                     if (oldChatData != newChatDataString) {
                         val title = "New Chat"
